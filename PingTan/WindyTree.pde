@@ -216,6 +216,13 @@ class WindyTree {
           float a=(255.-m_alpha)+m_alpha*noise(m_offset+1);
           a = constrain(a, 0, 255);
           int  m=(MAX_DEPTH-parentdepth);
+          
+          //throw new flower
+          if (random(1)<appear_threashold){
+          float f=noise(m_offset)*16+(MAX_DEPTH-m_depth+1)*2;
+          triger_the_flower(myChildNode.x, myChildNode.y,f,a);
+          }
+          
           if(m_blossom==1) {
             fill(255, a);
             rect(myChildNode.x, myChildNode.y, 3+10*w, 3+10*w);

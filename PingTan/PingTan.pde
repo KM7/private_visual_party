@@ -8,6 +8,20 @@ import ddf.minim.analysis.*;
 import javax.media.opengl.GL2;
 import codeanticode.gsvideo.*;
 
+//part of the flower drop initialization
+ArrayList<flower> pts;
+//initial wind status
+float windspeed=0;
+float windAcc=0;
+float trigger_threashold=0.5;
+float appear_threashold=0.01;
+float wind_power=0.5;
+boolean auto_pilot;
+boolean onPressed, showInstruction;
+
+//end of the configures
+
+
 final int White = 0;
 final int Silver = 1;
 final int Gray = 2;
@@ -70,6 +84,7 @@ void setup() {
   mm = new GSMovieMaker(this, width, height, "pingtan.ogg", GSMovieMaker.THEORA, GSMovieMaker.MEDIUM, fps);
   mm.setQueueSize(50, 10);
 
+
   ellipseMode(CENTER);
   colorMode(RGB, 255);  
   minim = new Minim(this);
@@ -82,6 +97,10 @@ void setup() {
   imgFluid = createImage(fluidSolver.getWidth(), fluidSolver.getHeight(), RGB);
   m_aspectRatio2 = (float)width*width/height/height;  
   textFont(createFont("Arial", 18));
+  
+//start off the initialization of the flower   
+    pts = new ArrayList<flower>();
+
 }
 
 void draw() {
@@ -102,6 +121,10 @@ void draw() {
   m_offset+=m_delta;
   loadPixels();
   mm.addFrame(pixels);
+  //draw part for the flower
+  handle_flower_drop();
+  //wind handling
+  update_wind();
 }
 
 boolean sketchFullScreen() {
@@ -318,4 +341,73 @@ void keyPressed() {
     exit();
   }
 }
+
+
+
 */
+
+void handle_flower_drop(){
+  /**
+    if (onPressed) {
+     flower newP = new flower(mouseX, mouseY, pts.size(), pts.size());
+      pts.add(newP);
+  }
+ **/
+  for (int i=0; i<pts.size(); i++) {
+    flower p = pts.get(i);
+    p.update();
+    p.display();
+  }
+ 
+  for (int i=pts.size()-1; i>-1; i--) {
+    flower p = pts.get(i);
+    if (p.dead) {
+      pts.remove(i);
+    }
+  }
+  
+      if (keyPressed&&key == 'n') {
+  windspeed=windspeed-1;
+  }
+  
+    
+      if (keyPressed&&key == 'm') {
+  windspeed=windspeed+1;
+  }
+      if (keyPressed&&key == 'k') {
+  onPressed=true;
+  } else{
+      onPressed=false;
+  }
+  
+  if(m_faudioY>trigger_threashold){
+onPressed=true;
+  } else{
+      onPressed=false;
+  }
+  
+  stroke(0);
+  fill(0);
+  text("Wind situation " + windspeed,50,50);
+}
+
+void triger_the_flower(float x,float y,float size,float a){
+      if (onPressed) {
+      flower newP = new flower(int(x), int(y), pts.size(), pts.size(),size,a);
+      pts.add(newP);
+       }
+}
+
+void update_wind(){
+  //update loop
+  windspeed=windspeed+windAcc;
+  //trigger loop
+  if (frameCount%100==0){
+    if (windspeed>0){
+    windAcc=-random(wind_power);
+    }else{
+    windAcc=random(wind_power);
+    }
+  }
+  
+}

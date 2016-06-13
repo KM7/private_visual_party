@@ -42,6 +42,13 @@ void draw() {
       if (keyPressed&&key == 'd') {
   windspeed=windspeed+1;
   }
+  
+        if (keyPressed&&key == 's') {
+  onPressed=true;
+  } else{
+      onPressed=false;
+  }
+  
   stroke(0);
   fill(0);
   text("Wind situation " + windspeed,50,50);
