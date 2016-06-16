@@ -8,6 +8,14 @@ import ddf.minim.analysis.*;
 import javax.media.opengl.GL2;
 import codeanticode.gsvideo.*;
 
+import oscP5.*;
+import netP5.*;
+  
+OscP5 oscP5;
+
+
+
+
 //part of the flower drop initialization
 ArrayList<flower> pts;
 //initial wind status
@@ -16,6 +24,8 @@ float windAcc=0;
 float trigger_threashold=0.5;
 float appear_threashold=0.01;
 float wind_power=0.5;
+float growth=0;
+float tilt=0;
 boolean auto_pilot;
 boolean onPressed, showInstruction;
 
@@ -78,6 +88,7 @@ ParticleSystem particleSystem;
 
 void setup() {
   frameRate(fps);  
+  noCursor();
   if(!fullScreenFlag) size(1400, 1000, P3D);   
   else size(displayWidth, displayHeight, P3D);
   
@@ -100,6 +111,8 @@ void setup() {
   
 //start off the initialization of the flower   
     pts = new ArrayList<flower>();
+    
+      oscP5 = new OscP5(this,12016);
 
 }
 
@@ -409,5 +422,57 @@ void update_wind(){
     windAcc=random(wind_power);
     }
   }
+  
+}
+
+/* incoming osc message are forwarded to the oscEvent method. */
+void oscEvent(OscMessage theOscMessage) {
+  /* check if theOscMessage has the address pattern we are looking for. */
+  
+  if(theOscMessage.checkAddrPattern("/test0")==true) {
+    /* check if the typetag is the right one. */
+      /* parse theOscMessage and extract the values from the osc message arguments. */
+      int firstValue = theOscMessage.get(0).intValue();  
+      trigger_threashold=float(firstValue)/float(255)*1;
+      println(trigger_threashold);
+      return;
+  } 
+  
+    if(theOscMessage.checkAddrPattern("/test1")==true) {
+    /* check if the typetag is the right one. */
+      /* parse theOscMessage and extract the values from the osc message arguments. */
+      int firstValue = theOscMessage.get(0).intValue();  
+      appear_threashold=float(firstValue)/float(255)*0.1;
+      println(appear_threashold);
+      return;
+  } 
+  
+    if(theOscMessage.checkAddrPattern("/test2")==true) {
+    /* check if the typetag is the right one. */
+      /* parse theOscMessage and extract the values from the osc message arguments. */
+      int firstValue = theOscMessage.get(0).intValue();  
+      wind_power=float(firstValue)/float(255)*1;
+      println(wind_power);
+      return;
+  } 
+  
+      if(theOscMessage.checkAddrPattern("/test5")==true) {
+    /* check if the typetag is the right one. */
+      /* parse theOscMessage and extract the values from the osc message arguments. */
+      int firstValue = theOscMessage.get(0).intValue();  
+      wind_power=float(firstValue)/float(255)*1;
+      println(wind_power);
+      return;
+  } 
+  
+        if(theOscMessage.checkAddrPattern("/test6")==true) {
+    /* check if the typetag is the right one. */
+      /* parse theOscMessage and extract the values from the osc message arguments. */
+      int firstValue = theOscMessage.get(0).intValue();  
+      wind_power=float(firstValue)/float(255)*1;
+      println(wind_power);
+      return;
+  } 
+  
   
 }
