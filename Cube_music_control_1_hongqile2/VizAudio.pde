@@ -13,22 +13,20 @@ class VizAudio {
   int sw = 2;
   float[] faudio = new float[avgSize];
 
-  AudioInput in;
   FFT fftLin;
   FFT fftLog;
 
   VizAudio(Minim minim) {
-    in = minim.getLineIn();
-    fftLin = new FFT(in.bufferSize(), in.sampleRate());
+    fftLin = new FFT(song.bufferSize(), song.sampleRate());
     fftLin.linAverages(30);
-    fftLog = new FFT(in.bufferSize(), in.sampleRate());
+    fftLog = new FFT(song.bufferSize(), song.sampleRate());
     fftLog.logAverages(22, 3);
   }
 
   void draw() {
     int  i;
-    fftLin.forward(in.mix);
-    fftLog.forward(in.mix);
+    fftLin.forward(song.mix);
+    fftLog.forward(song.mix);
     text("faudioX "+(int)(m_faudioX*100.), 15, height-330);
     text("faudioY "+(int)(m_faudioY*100.), 15, height-360);
     for (i=0; i<fftLin.avgSize(); i++) {
@@ -39,17 +37,17 @@ class VizAudio {
   }
 
 float getLevel(float level){
-  return in.left.level()*level;
+  return song.left.level()*level;
 }
 
   float[] getValue(int size) {
     //println(in.bufferSize());
-    int temp_value=in.bufferSize()/size;
+    int temp_value=song.bufferSize()/size;
     float[] temp_float=new float[size];
     
       for(int i = 0; i <temp_float.length; i++)
   {
-    temp_float[i] =in.left.get(temp_value*i);
+    temp_float[i] =song.left.get(temp_value*i);
   }
   println(temp_float[size-10]);
     return temp_float;

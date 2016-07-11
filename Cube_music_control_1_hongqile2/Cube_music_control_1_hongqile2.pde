@@ -1,18 +1,16 @@
 import ddf.minim.*;
 import ddf.minim.ugens.*;
 import ddf.minim.analysis.*;
-import glitchP5.*; // import GlitchP5
 
-VizAudio vizAudio;
+AudioPlayer song;
 Minim minim;
+VizAudio vizAudio;
 AudioOutput out;
 Delay myDelay;
 Branch _trunk;
 BackGround backGround;
 Cube[] cubes = new Cube[12];
-AudioPlayer song;
 Glitch glitch;
-GlitchP5 glitchP5;
 
 final int colorCount = 15;
 
@@ -33,12 +31,11 @@ int _maxLevels =6;
 boolean drawSlidingFlag = true;
 boolean drawFluidFlag = true;
 void setup() {
-  frameRate(30);
+  frameRate(100);
   size(1024, 768, P3D);
   noCursor();
   newTree();
   minim = new Minim(this);
-  vizAudio = new VizAudio(minim);
   backGround = new BackGround();
   out = minim.getLineOut();
   myDelay = new Delay( 0.15, 0.7, true, true );
@@ -57,6 +54,8 @@ void setup() {
 
   // and the Blip is patched through the delay into the output
   myBlip.patch( myDelay ).patch( out );
+    vizAudio = new VizAudio(minim);
+
   translate(width/2, height/2);
   //camera(70.0, 35.0, 120.0, 50.0, 50.0, 0.0, 0.0, 1.0, 0.0);
   for (int i =0; i<cubes.length; i++) {
@@ -104,7 +103,8 @@ void draw() {
   _trunk. maudioMove();
   popMatrix();
   camera_glitch(vizAudio.getLevel(0.5), vizAudio.getLevel(0.8), 0.5);
-  //saveFrame("line-######.png");
+  trigger_event();
+  saveFrame("line-######.png");
 }
 void mouseMoved()
 {
@@ -156,4 +156,8 @@ void keyPressed() {
     if (backgroundType==256)     
       backgroundType=0;
   }
+}
+
+void trigger_event(){
+song.cue(frameCount*10);
 }

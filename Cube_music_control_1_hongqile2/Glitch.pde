@@ -40,5 +40,4 @@ void glitchFucker(int x,int y)
   //          sustain      // max time until it dies off after appearing (int)
   //              );
 
-  glitchP5.glitch(x, y, x*100, y+200, (int)random(1500), (int)random(1300), 3, 0.8f,(int) random(1,3), 2);
 }
